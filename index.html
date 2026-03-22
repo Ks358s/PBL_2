@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing simulator — learn to spot fake messages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+    <header class="page-header">
+        <div class="page-header-inner">
+            <h1 class="logo hover-lift">Phishing simulator <span>Practice on a virtual phone</span></h1>
+            <div class="header-actions">
+                <button type="button" class="nav-btn hover-pop" onclick="toggleAdminPanel()">Admin</button>
+                <button type="button" class="nav-btn hover-pop" onclick="toggleLeaderboard()">Scores</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <!-- Left Sidebar - Stats -->
+        <aside class="sidebar-left">
+            <div class="stats-panel">
+                <div class="stat-card stat-points">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Points</span>
+                        <span class="stat-number" id="points">0</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-level">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Level</span>
+                        <span class="stat-number" id="level-num">1</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-streak">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Streak</span>
+                        <span class="stat-number" id="streak">0</span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sidebar-reset hover-pop" onclick="resetGame()">Reset</button>
+            </div>
+        </aside>
+
+        <!-- Center - Game Area -->
+        <section class="game-area">
+            <div id="game-container">
+                <!-- Scenarios will be dynamically loaded -->
+            </div>
+        </section>
+
+        <!-- Right Sidebar - Progress -->
+        <aside class="sidebar-right">
+            <div class="progress-panel">
+                <h3 class="progress-title">Progress</h3>
+                <div class="progress-wrap">
+                    <div id="progress-bar" class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                </div>
+                <p id="progress-text" class="progress-text">—</p>
+                <div class="hints-box">
+                    <h4 class="tips-heading">Quick checks</h4>
+                    <ul id="tips-list">
+                        <li>Government and banks rarely send payment links by SMS.</li>
+                        <li>Caller ID can be faked — hang up and call the official number.</li>
+                        <li>Never share OTP, UPI PIN, or card details with anyone.</li>
+                        <li>When in doubt, open the official app or visit a known branch.</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="modal hidden">
+        <div class="modal-content modal-fade-in">
+            <button class="modal-close" onclick="closeFeedback()">✕</button>
+            <h2 id="feedback-title" class="feedback-title"></h2>
+            <p id="feedback-text" class="feedback-text"></p>
+            <div id="tip-box" class="tip-box hidden">
+                <strong>💡 Safety Tip:</strong>
+                <p id="tip-content"></p>
+            </div>
+            <div class="modal-buttons">
+                <button id="next-btn" class="btn btn-primary" onclick="goToNextLevel()">Next Level →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="admin-modal" class="modal hidden">
+        <div class="admin-panel-content modal-fade-in">
+            <button class="modal-close" onclick="toggleAdminPanel()">✕</button>
+            <h2>⚙️ Admin Panel</h2>
+            
+            <div class="admin-tabs">
+                <button type="button" class="tab-btn active" onclick="switchAdminTab('add', this)">➕ Add Scenario</button>
+                <button type="button" class="tab-btn" onclick="switchAdminTab('manage', this)">📋 Manage Scenarios</button>
+            </div>
+
+            <!-- Add Scenario Tab -->
+            <div id="add-tab" class="admin-tab active">
+                <form onsubmit="addScenario(event)">
+                    <div class="form-group">
+                        <label>Scenario Title *</label>
+                        <input type="text" id="scenarioTitle" placeholder="e.g., Bank Alert Scam" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea id="scenarioDesc" placeholder="What the user sees..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Sender Info *</label>
+                        <input type="text" id="scenarioSender" placeholder="e.g., support@bank.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Message Content *</label>
+                        <textarea id="scenarioMessage" placeholder="The actual message/email content" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Correct Answer (phish/safe) *</label>
+                        <select id="scenarioAnswer" required>
+                            <option value="">Select...</option>
+                            <option value="phish">Scam (Phish)</option>
+                            <option value="safe">Safe</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Safety Tip *</label>
+                        <textarea id="scenarioTip" placeholder="Safety tip for users..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Emoji/Icon *</label>
+                        <input type="text" id="scenarioEmoji" placeholder="e.g., 🏦" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">➕ Add Scenario</button>
+                </form>
+            </div>
+
+            <!-- Manage Scenarios Tab -->
+            <div id="manage-tab" class="admin-tab hidden">
+                <div id="scenarios-list" class="scenarios-list">
+                    <!-- Scenarios will be listed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboard-modal" class="modal hidden">
+        <div class="modal-content modal-fade-in">
+            <button class="modal-close" onclick="toggleLeaderboard()">✕</button>
+            <h2>🏅 Leaderboard</h2>
+            <div id="leaderboard-list" class="leaderboard-list">
+                <!-- Scores will be listed here -->
+            </div>
+            <button class="btn btn-secondary" onclick="toggleLeaderboard()">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
