@@ -19,6 +19,45 @@ const CHANNEL_LABELS = {
     call: 'Phone call'
 };
 
+const HELP_RESOURCES = {
+    website: 'https://cybercrime.gov.in',
+    helpline: '1930'
+};
+
+function buildTutorialSteps(scenario, isCorrect) {
+    const channel = CHANNEL_LABELS[scenario.channel] || 'message';
+    const verifyAction = scenario.answer === 'phish'
+        ? `Do not reply or click anything. Verify this ${channel.toLowerCase()} only in the official app or website.`
+        : `Treat this as likely safe, but still verify in the official app or website if anything changes unexpectedly.`;
+
+    const steps = [
+        scenario.tip,
+        verifyAction,
+        'Never share OTP, UPI PIN, CVV, or full bank details with callers or messages.',
+        `If money was lost or details were shared, report immediately at ${HELP_RESOURCES.website} or call ${HELP_RESOURCES.helpline}.`
+    ];
+
+    if (!isCorrect) {
+        steps.unshift('Pause first: urgency, fear, unknown links, and requests for payment/OTP are major warning signs.');
+    }
+
+    return steps;
+}
+
+function renderTutorialBox(scenario, isCorrect) {
+    const tipBox = document.getElementById('tip-box');
+    const tipHeading = document.getElementById('tip-heading');
+    const tipList = document.getElementById('tip-list');
+
+    tipHeading.textContent = isCorrect
+        ? '✅ What to do in this situation'
+        : '⚠️ You chose wrong — do this next time';
+
+    const items = buildTutorialSteps(scenario, isCorrect);
+    tipList.innerHTML = items.map(item => `<li>${escapeHtml(item)}</li>`).join('');
+    tipBox.classList.remove('hidden');
+}
+
 /** Realistic mix: scams and genuine messages (India-focused, senior-relevant). */
 const defaultScenarios = [
     {
@@ -301,8 +340,6 @@ function checkAnswer(choice, scenarioId) {
     const modal = document.getElementById('feedback-modal');
     const title = document.getElementById('feedback-title');
     const text = document.getElementById('feedback-text');
-    const tipBox = document.getElementById('tip-box');
-    const tipContent = document.getElementById('tip-content');
 
     let isCorrect = false;
     if (choice === 'phish' && scenario.answer === 'phish') {
@@ -326,8 +363,7 @@ function checkAnswer(choice, scenarioId) {
     answerHistory.push({ scenarioId, correct: isCorrect });
     document.getElementById('points').innerText = score;
     document.getElementById('streak').innerText = streak;
-    tipContent.innerText = scenario.tip;
-    tipBox.classList.remove('hidden');
+    renderTutorialBox(scenario, isCorrect);
     modal.classList.remove('hidden');
 }
 
