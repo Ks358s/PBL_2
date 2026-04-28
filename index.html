@@ -17,6 +17,7 @@
             <div class="header-actions">
                 <button type="button" class="nav-btn hover-pop" onclick="toggleAdminPanel()">Admin</button>
                 <button type="button" class="nav-btn hover-pop" onclick="toggleLeaderboard()">Scores</button>
+                <a class="nav-btn hover-pop" href="#helpline-box">Helpline Box</a>
             </div>
         </div>
     </header>
@@ -79,6 +80,42 @@
             </div>
         </aside>
     </div>
+    <section id="helpline-box" class="helpline-box">
+        <h2>India Helpline Box</h2>
+        <p class="helpline-intro">If you face fraud, threats, or emergency situations, use these verified support channels.</p>
+        <div class="helpline-grid">
+            <article class="helpline-item">
+                <h3>Cyber Financial Fraud</h3>
+                <p><strong>Call:</strong> <a href="tel:1930">1930</a></p>
+                <p><strong>Website:</strong> <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer">cybercrime.gov.in</a></p>
+            </article>
+            <article class="helpline-item">
+                <h3>National Emergency Response</h3>
+                <p><strong>Call:</strong> <a href="tel:112">112</a></p>
+                <p><strong>Website:</strong> <a href="https://112.gov.in" target="_blank" rel="noopener noreferrer">112.gov.in</a></p>
+            </article>
+            <article class="helpline-item">
+                <h3>Women Helpline</h3>
+                <p><strong>Call:</strong> <a href="tel:181">181</a></p>
+                <p><strong>Website:</strong> <a href="https://wcd.nic.in/women-helpline-scheme-1" target="_blank" rel="noopener noreferrer">wcd.nic.in</a></p>
+            </article>
+            <article class="helpline-item">
+                <h3>Senior Citizen Support (Elder Line)</h3>
+                <p><strong>Call:</strong> <a href="tel:14567">14567</a></p>
+                <p><strong>Website:</strong> <a href="https://elderline.in" target="_blank" rel="noopener noreferrer">elderline.in</a></p>
+            </article>
+            <article class="helpline-item">
+                <h3>Child Helpline</h3>
+                <p><strong>Call:</strong> <a href="tel:1098">1098</a></p>
+                <p><strong>Website:</strong> <a href="https://www.childlineindia.org" target="_blank" rel="noopener noreferrer">childlineindia.org</a></p>
+            </article>
+            <article class="helpline-item">
+                <h3>Ambulance / Medical</h3>
+                <p><strong>Call:</strong> <a href="tel:108">108</a> / <a href="tel:102">102</a></p>
+                <p><strong>Reference:</strong> <a href="https://nhm.gov.in" target="_blank" rel="noopener noreferrer">nhm.gov.in</a></p>
+            </article>
+        </div>
+    </section>
     </div>
 
     <!-- Feedback Modal -->
@@ -88,8 +125,8 @@
             <h2 id="feedback-title" class="feedback-title"></h2>
             <p id="feedback-text" class="feedback-text"></p>
             <div id="tip-box" class="tip-box hidden">
-                <strong>💡 Safety Tip:</strong>
-                <p id="tip-content"></p>
+                <strong id="tip-heading">🧭 What to do now</strong>
+                <ul id="tip-list" class="tip-list"></ul>
             </div>
             <div class="modal-buttons">
                 <button id="next-btn" class="btn btn-primary" onclick="goToNextLevel()">Next Level →</button>
